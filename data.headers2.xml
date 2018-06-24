@@ -80,9 +80,8 @@
             if (xpath) {
               content = y.xpath(content, xpath);
             } else if (css) {
-               y.include('https://cdn.rawgit.com/thdoan/yql-tables/62dd1fbe/css2xpath.min.js');
-               xpath = css2xpath(css);
-               content = y.xpath(content, xpath);
+               y.include('https://cdn.rawgit.com/thdoan/yql-tables/b7a3989e/css2xpath.min.js');
+               content = y.xpath(content, css2xpath(css));
             }
           } catch (err) {
             y.log(err);
