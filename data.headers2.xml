@@ -8,9 +8,6 @@
   </meta>
   <bindings>
     <select itemPath="" produces="XML">
-      <urls>
-        <url>{url}</url>
-      </urls>
       <inputs>
          <key id="url" type="xs:string" paramType="variable" required="true" />
          <key id="ua" type="xs:string" paramType="variable" required="false" />
@@ -38,7 +35,7 @@
         req.fallbackCharset('ISO-8859-1');
 
         // Fetch URL
-        resp = req.get();
+        resp = req.accept('text/html').get();
         y.log('response length: ' + (resp.response && resp.response.length));
 
         // Check redirect
