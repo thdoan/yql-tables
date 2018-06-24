@@ -91,6 +91,7 @@
         data.resources += <content>{content}</content>;
 
         response.maxAge = 300;
+        response.object = data;
         ]]>
       </execute>
     </select>
