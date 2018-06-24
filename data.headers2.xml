@@ -80,8 +80,9 @@
             if (xpath) {
               content = y.xpath(content, xpath);
             } else if (css) {
-               y.include('https://cdn.jsdelivr.net/npm/css2xpath@0.0.1/index.min.js');
-               content = y.xpath(content, css2xpath(css));
+               y.include('http://cdn.jsdelivr.net/npm/css2xpath@0.0.1/index.min.js');
+               xpath = css2xpath(css);
+               content = y.xpath(content, xpath);
             }
           } catch (err) {
             y.log(err);
