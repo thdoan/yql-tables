@@ -2,7 +2,7 @@
 <table xmlns:i="http://query.yahooapis.com/v1/schema/internalTable.xsd" xmlns="http://query.yahooapis.com/v1/schema/table.xsd">
   <meta>
     <author>Marcel Duran (modified by T. H. Doan)</author>
-    <description>Request (GET) a URL and retrieve its content (non-binary) and headers. User Agent string (ua) and XPath selector (xpath) are optional. Forked from https://github.com/yql/yql-tables/blob/master/data/data.headers.xml.</description>
+    <description>Request (GET) a URL and retrieve its content (non-binary) and headers. User Agent string (ua) and XPath selector (xpath) are optional. Pass dom="true" to output structured HTML data (default is to return a flat string). Forked from https://github.com/yql/yql-tables/blob/master/data/data.headers.xml.</description>
     <sampleQuery>select * from {table} where url="http://www.yahoo.com"</sampleQuery>
     <sampleQuery>select * from {table} where url in ("http://www.yahoo.com","http://www.google.com") and ua="Mozilla/5.0 (compatible; MSIE 6.0; Windows NT 5.1)"</sampleQuery>
   </meta>
@@ -10,6 +10,7 @@
     <select itemPath="" produces="XML">
       <inputs>
          <key id="url" type="xs:string" paramType="variable" required="true" />
+         <key id="dom" type="xs:string" paramType="variable" required="false" />
          <key id="ua" type="xs:string" paramType="variable" required="false" />
          <key id="xpath" type="xs:string" paramType="variable" required="false" />
       </inputs>
@@ -84,6 +85,7 @@
           // Empty response for binaries
           content = '';
         }
+        if (dom!=='true') content = content.toXMLString();
 
         data.resources += <content>{content}</content>;
 
