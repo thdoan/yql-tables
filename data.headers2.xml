@@ -88,7 +88,7 @@
         data.resources += <content>{content}</content>;
 
         response.maxAge = 300;
-        response.object = data;
+        response.object = data.toXMLString();
         ]]>
       </execute>
     </select>
