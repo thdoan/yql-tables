@@ -27,6 +27,7 @@
         // Samsung S9
         else if (ua==='mobile') ua = 'Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Mobile Safari/537.36'
         req.header('User-Agent', ua);
+        y.log('user agent: ' + ua);
 
         // Set compression
         req.header('Accept-Encoding', 'gzip,deflate');
