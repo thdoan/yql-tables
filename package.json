@@ -1,6 +1,6 @@
 {
   "name": "thd-yql-tables",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "files": [
     "*.js",
     "*.xml"
