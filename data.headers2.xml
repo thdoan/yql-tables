@@ -80,7 +80,7 @@
             if (xpath) {
               content = y.xpath(content, xpath);
             } else if (css) {
-               y.include('https://cdn.jsdelivr.net/npm/thd-yql-tables@1.0.2/css2xpath.min.js');
+               y.include('https://cdn.jsdelivr.net/npm/thd-yql-tables@1.0.0/css2xpath.min.js');
                content = y.xpath(content, css2xpath(css));
             }
           } catch (err) {
