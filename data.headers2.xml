@@ -74,6 +74,7 @@
         if (header.indexOf('image') && header.indexOf('x-shockwave-flash')<0) {
           try {
             content = resp.response;
+            if (xpath) content = y.xpath(content, xpath);
           } catch (err) {
             y.log(err);
             // Empty response on error
