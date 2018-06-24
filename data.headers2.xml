@@ -80,7 +80,7 @@
             if (xpath) {
               content = y.xpath(content, xpath);
             } else if (css) {
-               y.include('https://cdn.rawgit.com/thdoan/yql-tables/b7a3989e/css2xpath.min.js');
+               y.include('https://cdn.jsdelivr.net/npm/thd-yql-tables@1.0.2/css2xpath.min.js');
                content = y.xpath(content, css2xpath(css));
             }
           } catch (err) {
@@ -96,6 +96,7 @@
 
         data.resources += <content>{content}</content>;
 
+        // Cache data for 5 minutes (300 seconds)
         response.maxAge = 300;
         response.object = data;
         ]]>
