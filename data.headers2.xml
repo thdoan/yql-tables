@@ -24,14 +24,18 @@
 
         // Set user agent
         if (ua==='desktop' || !ua) ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36';
-        // Samsung S9
+        // Emulate Google Pixel 2 if mobile
         else if (ua==='mobile') ua = 'Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Mobile Safari/537.36'
         req.header('User-Agent', ua);
         y.log('user agent: ' + ua);
 
         // Set compression
-        req.header('Accept-Encoding', 'gzip,deflate');
+        req.header('Accept-Encoding', 'gzip, deflate, br');
         req.decompress(true);
+
+        // Set miscellaneous headers
+        req.header('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8');
+        req.header('Cache-Control', 'max-age=0');
 
         // Bad servers don't set charset
         // YQL tries UTF-8 first, then we try ISO as a fallback
