@@ -8,6 +8,9 @@
   </meta>
   <bindings>
     <select itemPath="" produces="XML">
+      <urls>
+        <url>{url}</url>
+      </urls>
       <inputs>
          <key id="url" type="xs:string" paramType="variable" required="true" />
          <key id="ua" type="xs:string" paramType="variable" required="false" />
@@ -88,7 +91,6 @@
         data.resources += <content>{content}</content>;
 
         response.maxAge = 300;
-        response.object = data.toXMLString();
         ]]>
       </execute>
     </select>
