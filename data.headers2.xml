@@ -2,7 +2,7 @@
 <table xmlns:i="http://query.yahooapis.com/v1/schema/internalTable.xsd" xmlns="http://query.yahooapis.com/v1/schema/table.xsd">
   <meta>
     <author>Marcel Duran (modified by T. H. Doan)</author>
-    <description>Request (GET) a URL and retrieve its content (non-binary) and headers. User Agent string (ua), XPath selector (xpath), and CSS selector (css) are optional. If both 'xpath' and 'css' are provided, then 'xpath' takes precedence. Pass showheaders="true" to include response headers. Pass htmlstring="true" to output HTML as a string (default is to return structured data). Forked from https://github.com/yql/yql-tables/blob/master/data/data.headers.xml.</description>
+    <description>Request (GET) a URL and retrieve its content (non-binary) and headers. User Agent string (ua), XPath selector (xpath), and CSS selector (css) are optional. If both 'xpath' and 'css' are provided, then 'xpath' takes precedence. Pass showheaders="true" to include response headers. Pass htmlstring="false" to output HTML as structured data (default is to return HTML string). Forked from https://github.com/yql/yql-tables/blob/master/data/data.headers.xml.</description>
     <sampleQuery>select * from {table} where url="http://www.yahoo.com"</sampleQuery>
     <sampleQuery>select * from {table} where url in ("http://www.yahoo.com","http://www.google.com") and ua="Mozilla/5.0 (compatible; MSIE 6.0; Windows NT 5.1)"</sampleQuery>
   </meta>
@@ -100,7 +100,7 @@
           // Empty response for binaries
           content = '';
         }
-        if (htmlstring==='true') content = content.toXMLString();
+        if (htmlstring!=='false') content = content.toXMLString();
 
         data.resources += <content>{content}</content>;
 
