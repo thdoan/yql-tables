@@ -44,7 +44,7 @@
 
         // Fetch URL
         // accept('text/html') is required to support 'xpath' parameter
-        resp = req.accept('text/html').get();
+        resp = xpath ? req.accept('text/html').get() : req.get();
         y.log('response length: ' + (resp.response && resp.response.length));
 
         // Check redirect
