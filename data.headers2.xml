@@ -19,7 +19,7 @@
       <execute>
         <![CDATA[
         var content, count, header, location, redir, redirect, resp,
-          data = <resources/>,
+          data = <result/>,
           headers = <headers/>,
           req = y.rest(url);
 
@@ -56,7 +56,7 @@
             y.log('redirect: ' + redir.@status + ' = ' + redir.toString());
             location = redir.toString();
             if (location) {
-              data.resources +=
+              data.result +=
                 <redirect>
                     <url>{url}</url>
                     <status>{redir.@status}</status>
@@ -70,13 +70,13 @@
         }
 
         // Set result
-        data.resources += <url>{url}</url>;
-        data.resources += <status>{resp.status}</status>;
+        data.result += <url>{url}</url>;
+        data.result += <status>{resp.status}</status>;
 
         // Get headers?
         if (showheaders) {
           headers.headers = y.jsonToXml(resp.headers);
-          data.resources += headers;
+          data.result += headers;
         }
 
         // Get uncompressed response content for non-binary
@@ -102,7 +102,7 @@
         }
         if (htmlstring!=='false') content = content.toXMLString();
 
-        data.resources += <content>{content}</content>;
+        data.result += <content>{content}</content>;
 
         // Cache data for 5 minutes (300 seconds)
         response.maxAge = 300;
