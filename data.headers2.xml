@@ -2,25 +2,38 @@
 <table xmlns:i="http://query.yahooapis.com/v1/schema/internalTable.xsd" xmlns="http://query.yahooapis.com/v1/schema/table.xsd">
   <meta>
     <author>Marcel Duran (modified by T. H. Doan)</author>
-    <description>Request (GET) a URL and retrieve its content (non-binary) and headers. User Agent string (ua), XPath selector (xpath), and CSS selector (css) are optional. If both 'xpath' and 'css' are provided, then 'xpath' takes precedence. Pass showheaders="true" to include response headers. Pass htmlstring="false" to output HTML as structured data (default is to return HTML string). Forked from https://github.com/yql/yql-tables/blob/master/data/data.headers.xml.</description>
-    <sampleQuery>select * from {table} where url="http://www.yahoo.com"</sampleQuery>
-    <sampleQuery>select * from {table} where url in ("http://www.yahoo.com","http://www.google.com") and ua="Mozilla/5.0 (compatible; MSIE 6.0; Windows NT 5.1)"</sampleQuery>
+    <description>
+      Request a URL and retrieve its headers and content (non-binary only). Parameters:
+
+      url (required) = URL to query.
+      css (optional) = CSS selector to extract content from.
+      format (optional) = "htmlstring" to return a flat HTML string or "nodetree" to return a structured node tree; default is "raw", which is whatever the server returns.
+      showheaders (optional) = "true" to include response headers.
+      ua (optional) = User Agent string to spoof, or "desktop"/"mobile" to use generic desktop/mobile UA; defaults to "desktop".
+      xpath (optional) = XPath to extract content from.
+
+      If both 'css' and 'xpath' are provided, then 'xpath' takes precedence. Forked from https://github.com/yql/yql-tables/blob/master/data/data.headers.xml.
+    </description>
+    <sampleQuery>select * from {table} where url="https://www.yahoo.com/" and ua="Mozilla/5.0 (compatible; MSIE 6.0; Windows NT 5.1)"</sampleQuery>
+    <sampleQuery>select * from {table} where url="https://www.yahoo.com/" and css="title"</sampleQuery>
+    <sampleQuery>select * from {table} where url="https://www.yahoo.com/" and xpath="//title"</sampleQuery>
+    <sampleQuery>select * from {table} where url in ("https://www.yahoo.com/","https://www.google.com/")</sampleQuery>
   </meta>
   <bindings>
     <select itemPath="" produces="XML">
       <inputs>
-         <key id="url" type="xs:string" paramType="variable" required="true" />
-         <key id="css" type="xs:string" paramType="variable" required="false" />
-         <key id="htmlstring" type="xs:string" paramType="variable" required="false" />
-         <key id="showheaders" type="xs:string" paramType="variable" required="false" />
-         <key id="ua" type="xs:string" paramType="variable" required="false" />
-         <key id="xpath" type="xs:string" paramType="variable" required="false" />
+        <key id="url" type="xs:string" paramType="variable" required="true"/>
+        <key id="css" type="xs:string" paramType="variable" required="false"/>
+        <key id="format" type="xs:string" paramType="variable" required="false"/>
+        <key id="showheaders" type="xs:string" paramType="variable" required="false"/>
+        <key id="ua" type="xs:string" paramType="variable" required="false"/>
+        <key id="xpath" type="xs:string" paramType="variable" required="false"/>
       </inputs>
       <execute>
         <![CDATA[
-        var content, count, header, location, redir, redirect, resp,
+        var count, headers, location, redirect, resp,
+          content = '',
           data = <result/>,
-          headers = <headers/>,
           req = y.rest(url);
 
         // Set user agent (default to desktop)
@@ -43,15 +56,15 @@
         req.fallbackCharset('ISO-8859-1');
 
         // Fetch URL
-        // accept('text/html') is required to support 'xpath' parameter
-        resp = xpath ? req.accept('text/html').get() : req.get();
+        // accept('text/html') is required for toXMLString() and xpath()
+        resp = ((css || xpath || format==='htmlstring' || format==='nodetree') ? req.accept('text/html') : req).jsonCompat('new').get();
         y.log('response length: ' + (resp.response && resp.response.length));
 
         // Check redirect
         redirect = y.diagnostics.redirect;
         count = redirect && redirect.length();
         if (count) {
-          for (i=0; i<count; ++i) {
+          for (var i=0, redir; i<count; ++i) {
             redir = redirect[i];
             y.log('redirect: ' + redir.@status + ' = ' + redir.toString());
             location = redir.toString();
@@ -74,15 +87,12 @@
         data.result += <status>{resp.status}</status>;
 
         // Get headers?
-        if (showheaders) {
-          headers.headers = y.jsonToXml(resp.headers);
-          data.result += headers;
-        }
+        headers = resp.headers;
+        if (showheaders==='true') data.result += <headers>{y.jsonToXml(headers)}</headers>;
 
         // Get uncompressed response content for non-binary
-        header = resp.headers;
-        header = (header && header['content-type']) || '';
-        if (header.indexOf('image') && header.indexOf('x-shockwave-flash')<0) {
+        headers = (headers && headers['content-type']) || '';
+        if (headers.indexOf('image') && headers.indexOf('x-shockwave-flash')<0) {
           try {
             content = resp.response;
             if (xpath) {
@@ -93,14 +103,9 @@
             }
           } catch (err) {
             y.log(err);
-            // Empty response on error
-            content = '';
           }
-        } else {
-          // Empty response for binaries
-          content = '';
         }
-        if (htmlstring!=='false') content = content.toXMLString();
+        if (format==='htmlstring') content = content.toXMLString();
 
         data.result += <content>{content}</content>;
 
