@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <table xmlns:i="http://query.yahooapis.com/v1/schema/internalTable.xsd" xmlns="http://query.yahooapis.com/v1/schema/table.xsd">
   <meta>
-    <author>Marcel Duran (modified by T. H. Doan)</author>
+    <author>T. H. Doan (forked from data.headers table by Marcel Duran)</author>
     <description>
       Request a URL and retrieve its headers and content (non-binary only). Parameters:
 
